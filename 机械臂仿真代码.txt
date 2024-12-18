@@ -1,0 +1,209 @@
+%% 基于MATLAB的关节型四轴机械臂仿真
+ 
+%% 参数定义
+clear;
+close all;
+clc;
+ 
+%角度转换
+angle=pi/180;  %转化为角度制
+ 
+%D-H参数表
+theta1 = 0;   D1 = 15.7;  A1 = 0; alpha1 = pi/2; offset1 = 0;
+theta2 = pi/2;D2 = 0;     A2 = 13;  alpha2 = 0;    offset2 = 0;
+theta3 = pi/2;   D3 = 0;  A3 = 12.8; alpha3 = 0; offset3 = 0;
+theta4 = pi/2;D4 = 0;     A4 = 8.5;     alpha4 =0; offset4 = 0;
+
+%% DH法建立模型,关节转角，关节距离，连杆长度，连杆转角，关节类型（0转动，1移动），'standard'：建立标准型D-H参数
+L(1) = Link([theta1, D1, A1, alpha1, offset1], 'standard');
+L(2) = Link([theta2, D2, A2, alpha2, offset2], 'standard');
+L(3) = Link([theta3, D3, A3, alpha3, offset3], 'standard');
+L(4) = Link([theta4, D4, A4, alpha4, offset4], 'standard');
+
+% 定义关节范围
+L(1).qlim =[-135*angle, 135*angle];
+L(2).qlim =[-135*angle, 135*angle];
+L(3).qlim =[-135*angle, 135*angle];
+L(4).qlim =[-135*angle, 135*angle];
+
+Five_dof = SerialLink(L, 'name', '4-dof');
+Five_dof.base = transl(0,0,0.28);
+
+num = 30000;
+
+P = zeros(num, 3);
+
+for i = 1:num
+    
+    q1 = L(1).qlim(1) + rand * (L(1).qlim(2) - L(1).qlim(1) );
+    q2 = L(2).qlim(1) + rand * (L(2).qlim(2) - L(2).qlim(1) );
+    q3 = L(3).qlim(1) + rand * (L(3).qlim(2) - L(3).qlim(1) );
+    q4 = L(4).qlim(1) + rand * (L(4).qlim(2) - L(4).qlim(1) );
+    
+    q = [q1 q2 q3 q4];
+    
+    T = Five_dof.fkine(q);
+
+    P(i, :) = transl(T);
+
+end
+
+plot3(P(:,1), P(:,2), P(:,3), 'b.', 'MarkerSize',1 );
+
+hold on
+grid on
+daspect([1 1 1]);
+% %% 显示机械臂（把上述连杆“串起来”）
+% robot0 = SerialLink(L,'name','four_axis_robot');
+% theta = [0 pi pi/2 0];				%初始关节角度
+% figure(1)
+% robot0.plot(theta);
+% title('四轴机械臂模型');
+% 
+% %% 加入teach指令，则可调整各个关节角度
+% robot1 = SerialLink(L,'name','sixsix');
+% figure(2)
+% robot1.plot(theta);
+% robot1.teach
+% title('四轴机械臂模型可调节');
+% robot1 = SerialLink(L,'name','sixsix');
+% 
+% figure(2)
+% robot1.plot(theta);
+% robot1.teach
+% title('四轴机械臂模型可调节');
+
+
+%% 基于MATLAB的关节型四轴机械臂仿真
+ 
+%% 参数定义
+clear;
+close all;
+clc;
+ 
+%角度转换
+angle=pi/180;  %转化为角度制
+ 
+%D-H参数表
+theta1 = 0;   D1 = 15.7;  A1 = 0; alpha1 = pi/2; offset1 = 0;
+theta2 = pi/2;D2 = 0;     A2 = 13;  alpha2 = 0;    offset2 = 0;
+theta3 = pi/2;   D3 = 0;  A3 = 12.8; alpha3 = 0; offset3 = 0;
+theta4 = pi/2;D4 = 0;     A4 = 8.5;     alpha4 =0; offset4 = 0;
+
+%% DH法建立模型,关节转角，关节距离，连杆长度，连杆转角，关节类型（0转动，1移动），'standard'：建立标准型D-H参数
+L(1) = Link([theta1, D1, A1, alpha1, offset1], 'standard')
+L(2) = Link([theta2, D2, A2, alpha2, offset2], 'standard')
+L(3) = Link([theta3, D3, A3, alpha3, offset3], 'standard')
+L(4) = Link([theta4, D4, A4, alpha4, offset4], 'standard')
+
+% 定义关节范围
+L(1).qlim =[-135*angle, 135*angle];
+L(2).qlim =[-135*angle, 135*angle];
+L(3).qlim =[-135*angle, 135*angle];
+L(4).qlim =[-135*angle, 135*angle];
+
+%% 显示机械臂（把上述连杆“串起来”）
+robot0 = SerialLink(L,'name','four_axis_robot');
+theta = [0 pi pi/2 0];				%初始关节角度
+figure(1)
+robot0.plot(theta);
+title('四轴机械臂模型');
+
+%% 加入teach指令，则可调整各个关节角度
+robot1 = SerialLink(L,'name','sixsix');
+figure(2)
+robot1.plot(theta);
+robot1.teach
+title('四轴机械臂模型可调节');
+robot1 = SerialLink(L,'name','sixsix');
+
+figure(2)
+robot1.plot(theta);
+robot1.teach
+title('四轴机械臂模型可调节');
+
+
+
+%% 基于MATLAB的关节型四轴机械臂仿真
+ 
+%% 参数定义
+clear;
+close all;
+clc;
+ 
+%角度转换
+angle=pi/180;  %转化为角度制
+ 
+%D-H参数表
+theta1 = 0;   D1 = 15.7;  A1 = 0; alpha1 = pi/2; offset1 = 0;
+theta2 = pi/2;D2 = 0;     A2 = 13;  alpha2 = 0;    offset2 = 0;
+theta3 = pi/2;   D3 = 0;  A3 = 12.8; alpha3 = 0; offset3 = 0;
+theta4 = pi/2;D4 = 0;     A4 = 8.5;     alpha4 =0; offset4 = 0;
+
+%% DH法建立模型,关节转角，关节距离，连杆长度，连杆转角，关节类型（0转动，1移动），'standard'：建立标准型D-H参数
+L(1) = Link([theta1, D1, A1, alpha1, offset1], 'standard')
+L(2) = Link([theta2, D2, A2, alpha2, offset2], 'standard')
+L(3) = Link([theta3, D3, A3, alpha3, offset3], 'standard')
+L(4) = Link([theta4, D4, A4, alpha4, offset4], 'standard')
+
+% 创建一个4自由度的机械臂模型，并设置基座位置
+Five_dof = SerialLink(L, 'name', '4-dof');
+Five_dof.base = transl(0, 0, 0.28);
+
+%% 定义轨迹规划的关键点
+q_start = [0, 0, 0, 0]; % 初始关节角度 (示例值)
+q_goal = [pi/4, -pi/6, pi/3, -pi/4]; % 目标关节角度 (示例值)
+
+t_total = 10; % 总运动时间 (秒)
+num_steps = 100; % 运动步数
+time_vector = linspace(0, t_total, num_steps); % 时间向量
+
+%% 计算轨迹并存储末端执行器的位置
+P = zeros(num_steps, 3);
+Q = zeros(num_steps, 4);
+
+for i = 1:num_steps
+    t = time_vector(i);
+    q = quintic_poly(q_start, q_goal, t, t_total);
+    Q(i, :) = q;
+
+    T = Five_dof.fkine(q);
+    P(i, :) = transl(T)';
+end
+
+%% 可视化结果
+figure;
+subplot(2,1,1);
+plot(time_vector, Q);
+xlabel('时间 (s)');
+ylabel('关节角度 (rad)');
+title('关节角度随时间变化');
+legend({'Joint 1', 'Joint 2', 'Joint 3', 'Joint 4'}, 'Location', 'best');
+grid on;
+
+subplot(2,1,2);
+plot3(P(:,1), P(:,2), P(:,3), 'b-', 'LineWidth', 1.5);
+xlabel('X 轴');
+ylabel('Y 轴');
+zlabel('Z 轴');
+title('末端执行器轨迹');
+grid on;
+view(3);
+
+%% 使用五次多项式进行轨迹规划
+function qd = quintic_poly(q_start, q_goal, t, t_total)
+    a0 = q_start;
+    a1 = zeros(size(q_start));
+    a2 = zeros(size(q_start));
+    a3 = 10 * (q_goal - q_start) / t_total^3;
+    a4 = -15 * (q_goal - q_start) / t_total^4;
+    a5 = 6 * (q_goal - q_start) / t_total^5;
+
+    qd = a0 + a1*t + a2*t.^2 + a3*t.^3 + a4*t.^4 + a5*t.^5;
+end
+
+
+
+
+
+
